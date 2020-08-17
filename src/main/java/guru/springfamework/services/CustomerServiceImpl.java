@@ -1,0 +1,41 @@
+package guru.springfamework.services;
+
+import guru.springfamework.api.v1.mapper.CustomerMapper;
+import guru.springfamework.api.v1.model.CustomerDTO;
+import guru.springfamework.domain.Customer;
+import guru.springfamework.repositories.CustomerRepository;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+public class CustomerServiceImpl implements CustomerService {
+    CustomerRepository repository;
+    CustomerMapper mapper = CustomerMapper.INSTANCE;
+
+    public CustomerServiceImpl(CustomerRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public CustomerDTO getByFirstname(String firstname) {
+        return null;
+    }
+
+    @Override
+    @Nullable
+    public CustomerDTO getById(Long id) {
+        Optional<Customer> customer = repository.findById(id);
+        return customer.map(value -> mapper.customerToCustomerDTO(value)).orElse(null);
+    }
+
+    @Override
+    public List<CustomerDTO> getAllCustomers() {
+        return repository.findAll().stream()
+        .map(customer -> mapper.customerToCustomerDTO(customer))
+        .collect(Collectors.toList());
+    }
+}
