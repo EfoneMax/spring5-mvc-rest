@@ -1,17 +1,20 @@
 package guru.springfamework.bootstrap;
 
 import guru.springfamework.domain.Category;
+import guru.springfamework.domain.Customer;
 import guru.springfamework.repositories.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import guru.springfamework.repositories.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BootStrap implements CommandLineRunner {
     private final CategoryRepository repository;
+    private final CustomerRepository customerRepository;
 
-    public BootStrap(CategoryRepository repository) {
+    public BootStrap(CategoryRepository repository, CustomerRepository customerRepository) {
         this.repository = repository;
+        this.customerRepository = customerRepository;
     }
 
     @Override
@@ -37,6 +40,11 @@ public class BootStrap implements CommandLineRunner {
         repository.save(exotic);
         repository.save(nuts);
 
+        Customer customer1 = Customer.builder().id(1L).firstname("one").lastname("lst").build();
+        Customer customer2 = Customer.builder().id(2L).firstname("two").lastname("2cnd").build();
+
+        customerRepository.save(customer1);
+        customerRepository.save(customer2);
 
         System.out.println("Data Loaded = " + repository.count() );
 
