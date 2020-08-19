@@ -20,6 +20,9 @@ import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CustomerServiceImplTest {
@@ -100,5 +103,17 @@ public class CustomerServiceImplTest {
         //then
         assertEquals(customerDTO.getFirstname(), updatedCustomer.getFirstname());
         assertEquals("/api/v1/customers/1", updatedCustomer.getCustomerUrl());
+    }
+
+    @Test
+    public void testDeleteCustomerById() {
+        //given
+        Long id = 1L;
+
+        //when
+        service.deleteCustomer(id);
+
+        //then
+        verify(repository, times((1))).deleteById(anyLong());
     }
 }

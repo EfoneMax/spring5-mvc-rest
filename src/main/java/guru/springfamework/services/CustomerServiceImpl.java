@@ -30,8 +30,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Nullable
     public CustomerDTO getById(Long id) {
-        Optional<Customer> customer = repository.findById(id);
-        return customer.map(value -> mapper.customerToCustomerDTO(value)).orElse(null);
+        return repository.findById(id).map(mapper::customerToCustomerDTO)
+                .map(customerDTO -> {
+                    customerDTO.setCustomerUrl("/api/v1/customer/" + id);
+                    return customerDTO;
+                }).orElseThrow(RuntimeException::new);
     }
 
     @Override
@@ -81,5 +84,10 @@ public class CustomerServiceImpl implements CustomerService {
 
             return returnDTO;
         }).orElseThrow(RuntimeException::new); //todo implement better exception handling;
+    }
+
+    @Override
+    public void deleteCustomer(Long id) {
+        repository.deleteById(id);
     }
 }
