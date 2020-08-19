@@ -1,13 +1,16 @@
 package guru.springfamework.services;
 
+import guru.springfamework.api.v1.mapper.CustomerMapper;
 import guru.springfamework.api.v1.model.CustomerDTO;
 import guru.springfamework.api.v1.model.CustomerListDTO;
 import guru.springfamework.domain.Customer;
 import guru.springfamework.repositories.CustomerRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.mapstruct.Mapper;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class CustomerServiceImplTest {
@@ -35,6 +39,8 @@ public class CustomerServiceImplTest {
 
     CustomerService service;
 
+    CustomerMapper mapper = CustomerMapper.INSTANCE;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -42,7 +48,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void getByFirstname() {
+    public void testGetByFirstname() {
         //given
         when(repository.findById(1L)).thenReturn(Optional.of(oneCustomer));
 
@@ -55,7 +61,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void getAllCustomers() {
+    public void testGetAllCustomers() {
         //given
         List<Customer> customers = Arrays.asList(oneCustomer, twoCustomer);
         when(repository.findAll()).thenReturn(customers);
@@ -65,5 +71,20 @@ public class CustomerServiceImplTest {
 
         //then
         assertEquals(2, allCustomers.size());
+    }
+
+    @Test
+    public void testCreateNewCustomer() {
+        //given
+        oneCustomer.setId(3L);
+        CustomerDTO saveCustomerDTO = mapper.customerToCustomerDTO(oneCustomer);
+        when(repository.save(any(Customer.class))).thenReturn(oneCustomer);
+
+        //when
+        CustomerDTO savedCustomerDTO = service.createNewCustomer(saveCustomerDTO);
+
+        //then
+        assertEquals(saveCustomerDTO.getFirstname(), savedCustomerDTO.getFirstname());
+        assertEquals("/api/v1/customers/3", savedCustomerDTO.getCustomerUrl());
     }
 }

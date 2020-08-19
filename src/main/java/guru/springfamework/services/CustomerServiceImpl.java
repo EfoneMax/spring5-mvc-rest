@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
+    public static final String API_V_1_CUSTOMERS = "/api/v1/customers";
     CustomerRepository repository;
     CustomerMapper mapper = CustomerMapper.INSTANCE;
 
@@ -37,9 +38,19 @@ public class CustomerServiceImpl implements CustomerService {
         return repository.findAll().stream()
         .map(customer -> {
             CustomerDTO customerDTO = mapper.customerToCustomerDTO(customer);
-            customerDTO.setCustomerUrl("/api/v1/customers/" + customer.getId());
+            customerDTO.setCustomerUrl(API_V_1_CUSTOMERS + "/" + customer.getId());
             return customerDTO;
         })
         .collect(Collectors.toList());
+    }
+
+    @Override
+    public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
+        Customer customer = mapper.customerDTOToCustomer(customerDTO);
+        Customer savedCustomer = repository.save(customer);
+        customerDTO.setId(savedCustomer.getId());
+        customerDTO.setCustomerUrl(API_V_1_CUSTOMERS + "/" + savedCustomer.getId());
+
+        return customerDTO;
     }
 }
