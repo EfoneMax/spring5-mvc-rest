@@ -15,9 +15,10 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
     public static final String API_V_1_CUSTOMERS = "/api/v1/customers";
     CustomerRepository repository;
-    CustomerMapper mapper = CustomerMapper.INSTANCE;
+    CustomerMapper mapper;
 
-    public CustomerServiceImpl(CustomerRepository repository) {
+    public CustomerServiceImpl(CustomerMapper mapper, CustomerRepository repository) {
+        this.mapper = mapper;
         this.repository = repository;
     }
 
@@ -62,5 +63,21 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO updateCustomer(Long id, CustomerDTO customerDTO) {
         customerDTO.setId(id);
         return saveAndReturnDTO(customerDTO);
+    }
+
+    @Override
+    public CustomerDTO patchCustomer(Long id, CustomerDTO customerDTO) {
+        return repository.findById(id).map(customer -> {
+
+            if(customerDTO.getFirstname() != null){
+                customer.setFirstname(customerDTO.getFirstname());
+            }
+
+            if(customerDTO.getLastname() != null){
+                customer.setLastname(customerDTO.getLastname());
+            }
+
+            return mapper.customerToCustomerDTO(repository.save(customer));
+        }).orElseThrow(RuntimeException::new); //todo implement better exception handling;
     }
 }
