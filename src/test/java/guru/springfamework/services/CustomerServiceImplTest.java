@@ -2,23 +2,19 @@ package guru.springfamework.services;
 
 import guru.springfamework.api.v1.mapper.CustomerMapper;
 import guru.springfamework.api.v1.model.CustomerDTO;
-import guru.springfamework.api.v1.model.CustomerListDTO;
+import guru.springfamework.controllers.v1.CustomerController;
 import guru.springfamework.domain.Customer;
 import guru.springfamework.repositories.CustomerRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.mapstruct.Mapper;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
@@ -88,7 +84,7 @@ public class CustomerServiceImplTest {
 
         //then
         assertEquals(saveCustomerDTO.getFirstname(), savedCustomerDTO.getFirstname());
-        assertEquals("/api/v1/customers/3", savedCustomerDTO.getCustomerUrl());
+        assertEquals(CustomerController.BASE_URL + "/3", savedCustomerDTO.getCustomerUrl());
     }
 
     @Test
@@ -102,7 +98,7 @@ public class CustomerServiceImplTest {
 
         //then
         assertEquals(customerDTO.getFirstname(), updatedCustomer.getFirstname());
-        assertEquals("/api/v1/customers/1", updatedCustomer.getCustomerUrl());
+        assertEquals(CustomerController.BASE_URL + "/1", updatedCustomer.getCustomerUrl());
     }
 
     @Test

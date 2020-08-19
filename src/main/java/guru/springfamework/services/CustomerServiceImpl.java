@@ -2,18 +2,17 @@ package guru.springfamework.services;
 
 import guru.springfamework.api.v1.mapper.CustomerMapper;
 import guru.springfamework.api.v1.model.CustomerDTO;
+import guru.springfamework.controllers.v1.CustomerController;
 import guru.springfamework.domain.Customer;
 import guru.springfamework.repositories.CustomerRepository;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-    public static final String API_V_1_CUSTOMERS = "/api/v1/customers";
     CustomerRepository repository;
     CustomerMapper mapper;
 
@@ -32,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO getById(Long id) {
         return repository.findById(id).map(mapper::customerToCustomerDTO)
                 .map(customerDTO -> {
-                    customerDTO.setCustomerUrl("/api/v1/customer/" + id);
+                    customerDTO.setCustomerUrl(CustomerController.BASE_URL + "/" + id);
                     return customerDTO;
                 }).orElseThrow(RuntimeException::new);
     }
@@ -42,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
         return repository.findAll().stream()
         .map(customer -> {
             CustomerDTO customerDTO = mapper.customerToCustomerDTO(customer);
-            customerDTO.setCustomerUrl(API_V_1_CUSTOMERS + "/" + customer.getId());
+            customerDTO.setCustomerUrl(CustomerController.BASE_URL + "/" + customer.getId());
             return customerDTO;
         })
         .collect(Collectors.toList());
@@ -57,7 +56,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = mapper.customerDTOToCustomer(customerDTO);
         Customer savedCustomer = repository.save(customer);
 
-        customerDTO.setCustomerUrl(API_V_1_CUSTOMERS + "/" +savedCustomer.getId());
+        customerDTO.setCustomerUrl(CustomerController.BASE_URL + "/" +savedCustomer.getId());
 
         return customerDTO;
     }
