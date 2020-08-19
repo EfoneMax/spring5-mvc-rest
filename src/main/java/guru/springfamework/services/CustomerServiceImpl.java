@@ -68,7 +68,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO patchCustomer(Long id, CustomerDTO customerDTO) {
         return repository.findById(id).map(customer -> {
-
             if(customerDTO.getFirstname() != null){
                 customer.setFirstname(customerDTO.getFirstname());
             }
@@ -77,7 +76,10 @@ public class CustomerServiceImpl implements CustomerService {
                 customer.setLastname(customerDTO.getLastname());
             }
 
-            return mapper.customerToCustomerDTO(repository.save(customer));
+            CustomerDTO returnDTO = mapper.customerToCustomerDTO(repository.save(customer));
+            returnDTO.setCustomerUrl("/api/v1/customer/" + id);
+
+            return returnDTO;
         }).orElseThrow(RuntimeException::new); //todo implement better exception handling;
     }
 }
