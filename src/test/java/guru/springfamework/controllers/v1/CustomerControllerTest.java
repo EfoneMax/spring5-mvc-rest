@@ -1,7 +1,6 @@
 package guru.springfamework.controllers.v1;
 
 import guru.springfamework.api.v1.model.CustomerDTO;
-import guru.springfamework.domain.Customer;
 import guru.springfamework.exceptionHandlers.RestResponseEntityExceptionHandler;
 import guru.springfamework.exceptions.ResourceNotFoundException;
 import guru.springfamework.services.CustomerService;
@@ -10,7 +9,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;

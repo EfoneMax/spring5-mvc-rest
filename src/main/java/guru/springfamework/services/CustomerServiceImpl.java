@@ -14,17 +14,12 @@ import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-    CustomerRepository repository;
-    CustomerMapper mapper;
+    private final CustomerRepository repository;
+    private final CustomerMapper mapper;
 
     public CustomerServiceImpl(CustomerMapper mapper, CustomerRepository repository) {
         this.mapper = mapper;
         this.repository = repository;
-    }
-
-    @Override
-    public CustomerDTO getByFirstname(String firstname) {
-        return null;
     }
 
     @Override

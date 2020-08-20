@@ -12,19 +12,16 @@ import javax.persistence.Id;
 @Data
 @Entity
 @NoArgsConstructor
-public class Customer {
+public class Vendor {
     @Builder
-    public Customer(Long id, String firstname, String lastname) {
+    public Vendor(Long id, String name) {
         this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.name = name;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String firstname;
-
-    private String lastname;
+    private String name;
+    private String vendorUrl;
 }
