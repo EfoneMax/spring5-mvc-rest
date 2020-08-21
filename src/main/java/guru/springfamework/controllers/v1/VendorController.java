@@ -3,6 +3,8 @@ package guru.springfamework.controllers.v1;
 import guru.springfamework.api.v1.model.VendorDTO;
 import guru.springfamework.api.v1.model.VendorListDTO;
 import guru.springfamework.services.VendorService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Api(tags = "this is useless tag-description for vendor controller")
 @RestController
 @RequestMapping(VendorController.BASE_URL)
 public class VendorController {
@@ -29,6 +32,7 @@ public class VendorController {
     }
 
     @GetMapping
+    @ApiOperation(value = "gettin all da vendors")
     @ResponseStatus(HttpStatus.OK)
     public VendorListDTO getAllVendors() {
         List<VendorDTO> allVendors = service.getAllVendors();
