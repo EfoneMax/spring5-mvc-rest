@@ -1,6 +1,7 @@
 package guru.springfamework.api.v1.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,9 @@ public class CustomerDTO {
     }
 
     private Long id;
+    @ApiModelProperty(value = "This is first name rly", required = true)
     private String firstname;
+    @ApiModelProperty(required = false)
     private String lastname;
     @JsonProperty("customer_url")
     private String customerUrl;
