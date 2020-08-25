@@ -22,6 +22,6 @@ public class CustomerDTO {
     private String firstname;
     @ApiModelProperty(required = false)
     private String lastname;
-    @JsonProperty("customer_url")
+    @JsonProperty("customerUrl")
     private String customerUrl;
 }
