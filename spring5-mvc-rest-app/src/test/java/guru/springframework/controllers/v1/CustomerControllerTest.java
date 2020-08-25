@@ -1,8 +1,9 @@
 package guru.springframework.controllers.v1;
 
-import guru.springframework.api.v1.model.CustomerDTO;
+
 import guru.springframework.exceptionHandlers.RestResponseEntityExceptionHandler;
 import guru.springframework.exceptions.ResourceNotFoundException;
+import guru.springframework.model.CustomerDTO;
 import guru.springframework.services.CustomerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,16 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class CustomerControllerTest {
-    public static final CustomerDTO oneCustomer = CustomerDTO.builder()
-            .id(1L)
-            .firstname("OneFirstname")
-            .lastname("OneLastname")
-            .build();
-    public static final CustomerDTO twoCustomer = CustomerDTO.builder()
-            .id(2L)
-            .firstname("TwoFirstname")
-            .lastname("TwoLastname")
-            .build();
+    CustomerDTO oneCustomer = new CustomerDTO();
+    CustomerDTO twoCustomer = new CustomerDTO();
 
     @Mock
     CustomerService service;
@@ -54,6 +47,11 @@ public class CustomerControllerTest {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
                 .setControllerAdvice(RestResponseEntityExceptionHandler.class).build();
+        oneCustomer.setFirstname("OneFirstname");
+        oneCustomer.setLastname("OneLastname");
+
+        oneCustomer.setFirstname("TwoFirstname");
+        oneCustomer.setLastname("TwoLastname");
     }
 
     @Test
@@ -81,7 +79,6 @@ public class CustomerControllerTest {
         returnDTO.setLastname(oneCustomer.getLastname());
         returnDTO.setCustomerUrl(CustomerController.BASE_URL + "/1");
 
-        oneCustomer.setId(null);
         when(service.createNewCustomer(oneCustomer)).thenReturn(returnDTO);
 
         //when/then
@@ -102,7 +99,6 @@ public class CustomerControllerTest {
         returnDTO.setLastname(oneCustomer.getLastname());
         returnDTO.setCustomerUrl(CustomerController.BASE_URL + "/1");
 
-        oneCustomer.setId(null);
         when(service.updateCustomer(1L, oneCustomer)).thenReturn(returnDTO);
 
         //when/then
@@ -123,7 +119,6 @@ public class CustomerControllerTest {
         returnDTO.setLastname("NewLastname");
         returnDTO.setCustomerUrl(CustomerController.BASE_URL + "/1");
 
-        oneCustomer.setId(null);
         when(service.patchCustomer(1L, oneCustomer)).thenReturn(returnDTO);
 
         //when/then
