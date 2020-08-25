@@ -1,10 +1,12 @@
 package guru.springframework.services;
 
 import guru.springframework.api.v1.mapper.CustomerMapper;
-import guru.springframework.api.v1.model.CustomerDTO;
+
+
 import guru.springframework.controllers.v1.CustomerController;
 import guru.springframework.domain.Customer;
 import guru.springframework.exceptions.ResourceNotFoundException;
+import guru.springframework.model.CustomerDTO;
 import guru.springframework.repositories.CustomerRepository;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -45,13 +47,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
-        return saveAndReturnDTO(customerDTO);
+        return saveAndReturnDTO(mapper.customerDTOToCustomer(customerDTO));
     }
 
-    private CustomerDTO saveAndReturnDTO(CustomerDTO customerDTO) {
-        Customer customer = mapper.customerDTOToCustomer(customerDTO);
+    private CustomerDTO saveAndReturnDTO(Customer customer) {
         Customer savedCustomer = repository.save(customer);
-
+        CustomerDTO customerDTO = mapper.customerToCustomerDTO(savedCustomer);
         customerDTO.setCustomerUrl(CustomerController.BASE_URL + "/" +savedCustomer.getId());
 
         return customerDTO;
@@ -59,8 +60,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO updateCustomer(Long id, CustomerDTO customerDTO) {
-        customerDTO.setId(id);
-        return saveAndReturnDTO(customerDTO);
+        Customer customer = mapper.customerDTOToCustomer(customerDTO);
+        customer.setId(id);
+
+        return saveAndReturnDTO(customer);
     }
 
     @Override
