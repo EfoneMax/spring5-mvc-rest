@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -72,7 +73,6 @@ public class VendorServiceImplTest {
     @Test
     public void testCreateNewVendor() {
         //given
-        firstVendor.setId(null);
         when(repository.save(any(Vendor.class))).thenReturn(firstVendor);
         
         //when
@@ -101,6 +101,7 @@ public class VendorServiceImplTest {
         //given
         VendorDTO vendorDTO = mapper.VendorToVendorDTO(firstVendor);
         vendorDTO.setName(null);
+        when(repository.findById(any())).thenReturn(Optional.ofNullable(firstVendor));
         when(repository.save(any(Vendor.class))).thenReturn(firstVendor);
 
         //when
